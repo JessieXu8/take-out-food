@@ -1,3 +1,10 @@
+const {splitIdAndAmounts,
+  bestCharge} = require('../src/best-charge')
+
+const {loadAllItems} = require('../src/items')
+
+const {loadPromotions} = require('../src/promotions')
+
 describe('Take out food', function () {
 
   it('should generate best charge when best is 指定菜品半价', function() {
@@ -45,4 +52,22 @@ describe('Take out food', function () {
     expect(summary).toEqual(expected)
   });
 
+});
+
+describe('unit test', () => {
+
+  it('unit test of splitIdAndAmounts()', () => {
+
+    const selectedItems = ["ITEM0001 x 1", "ITEM0013 x 2", "ITEM0022 x 1"];
+
+    const formatedIdAndAmounts=splitIdAndAmounts(selectedItems);
+
+    let result=JSON.stringify([
+      {"id":"ITEM0001","amounts":1},
+      {"id":"ITEM0013","amounts":2},
+			{"id":"ITEM0022","amounts":1}
+    ]);
+    expect(JSON.stringify(formatedIdAndAmounts)).toBe(result)
+
+  });
 });
