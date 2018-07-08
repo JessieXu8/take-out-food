@@ -4,6 +4,7 @@ const {splitIdAndAmounts,
   preferentialModeOne,
   preferentialModeTwo,
   choosePreferentialMode,
+  getFinalMoney,
   bestCharge} = require('../src/best-charge')
 
 const {loadAllItems} = require('../src/items')
@@ -161,6 +162,26 @@ describe('unit test', () => {
 
     let result=JSON.stringify({"savedMoney":13,"mode":2});
     expect(JSON.stringify(savedMoneyAndMode)).toBe(result)
+
+  });
+});
+
+describe('unit test', () => {
+
+  it('unit test of getFinalMoney()', () => {
+
+    const selectedItems = ["ITEM0001 x 1", "ITEM0013 x 2", "ITEM0022 x 1"];
+
+    const formatedIdAndAmounts=splitIdAndAmounts(selectedItems);
+    const basicOrderDetails=getBasicOrderDetails(formatedIdAndAmounts , loadAllItems());
+    const prePreferentialTotal=getPrePreferentialTotal(basicOrderDetails);
+    const savedMoneyByModeOne=preferentialModeOne(prePreferentialTotal);
+    const savedMoneyByModeTwo=preferentialModeTwo(prePreferentialTotal,basicOrderDetails,loadPromotions());
+    const savedMoneyAndMode = choosePreferentialMode(savedMoneyByModeOne,savedMoneyByModeTwo);
+    const finalMoney=getFinalMoney(prePreferentialTotal ,savedMoneyAndMode);
+
+    let result=JSON.stringify(25);
+    expect(JSON.stringify(finalMoney)).toBe(result)
 
   });
 });

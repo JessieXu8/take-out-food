@@ -13,6 +13,8 @@ function bestCharge(selectedItems) {
   const savedMoneyByModeTwo=preferentialModeTwo(prePreferentialTotal,basicOrderDetails,loadPromotions());
   const savedMoneyAndMode = choosePreferentialMode(savedMoneyByModeOne,savedMoneyByModeTwo);
   console.info(savedMoneyAndMode);
+  const finalMoney=getFinalMoney(prePreferentialTotal ,savedMoneyAndMode);
+  console.info(finalMoney);
   return /*TODO*/;
 }
 
@@ -83,6 +85,11 @@ function choosePreferentialMode(savedMoneyByModeOne,savedMoneyByModeTwo){
   }
   return savedMoneyAndMode;
 }
+/*计算订单优惠后总计*/
+function getFinalMoney(prePreferentialTotal ,savedMoneyAndMode){
+  let finalMoney = prePreferentialTotal -savedMoneyAndMode.savedMoney;
+  return finalMoney;
+}
 
 module.exports={
   splitIdAndAmounts,
@@ -91,5 +98,6 @@ module.exports={
   preferentialModeOne,
   preferentialModeTwo,
   choosePreferentialMode,
+  getFinalMoney,
   bestCharge
 }
