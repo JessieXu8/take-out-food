@@ -1,0 +1,44 @@
+﻿1.将点餐条码分割成[{id:'ITEM0001',amounts:1},...]的形式---------splitIdAndAmounts()   v
+  input:  selectedItems , [string]
+  output: formatedIdAndAmounts , [{id: String , amounts: Number}]
+
+2.得到基本订单详情------------getBasicOrderDetails()    v
+  input:  formatedIdAndAmounts , [{id: String , amounts: Number}]
+          allItems, loadAllItems()
+  output: basicOrderDetails[{
+              id: String,
+              name: String,
+              price: String,
+              amounts: Number,
+              subTotal: Number
+          }]
+
+3.得到订单优惠前总价------getPrePreferentialTotal()  v
+  input:  basicOrderDetails
+  output: prePreferentialTotal, Number
+
+4.优惠方式一节省的钱（满30-6）--------preferentialModeOne()  v
+  input:  prePreferentialTotal, Number
+  output: savedMoneyByModeOne , Number
+
+5.优惠方式二节省的钱（指定菜品半价（黄焖鸡，凉皮））--------preferentialModeTwo()  v
+  input:  prePreferentialTotal, Number
+          basicOrderDetails
+          promotions , loadPromotions()
+  output: savedMoneyByModeTwo , Number
+
+6.选择优惠方式--------choosePreferentialMode()  v
+  input:  savedMoneyByModeOne , Number
+          savedMoneyByModeTwo , Number
+  output: savedMoneyAndMode{savedMoney : Number , mode : Number}
+           
+7.计算订单优惠后需要付的钱-----getFinalMoney()   v
+  input:  prePreferentialTotal , Number
+          savedMoneyAndMode , {savedMoney : Number , mode : Number}
+  output: finalMoney , Number
+
+8.得到基本订单详情------getFinalOrderDetails()  v
+  input:  basicOrderDetails
+          savedMoneyAndMode
+          finalMoney
+  output: finalOrderDetails , String
