@@ -1,4 +1,5 @@
 const {splitIdAndAmounts,
+  getBasicOrderDetails,
   bestCharge} = require('../src/best-charge')
 
 const {loadAllItems} = require('../src/items')
@@ -68,6 +69,25 @@ describe('unit test', () => {
 			{"id":"ITEM0022","amounts":1}
     ]);
     expect(JSON.stringify(formatedIdAndAmounts)).toBe(result)
+
+  });
+});
+
+describe('unit test', () => {
+
+  it('unit test of getBasicOrderDetails()', () => {
+
+    const selectedItems = ["ITEM0001 x 1", "ITEM0013 x 2", "ITEM0022 x 1"];
+
+    const formatedIdAndAmounts=splitIdAndAmounts(selectedItems);
+    const basicOrderDetails=getBasicOrderDetails(formatedIdAndAmounts , loadAllItems());
+
+    let result=JSON.stringify([
+      {"id":"ITEM0001","name":"黄焖鸡","price":18,"amounts":1,"subTotal":18},
+      {"id":"ITEM0013","name":"肉夹馍","price":6,"amounts":2,"subTotal":12},
+			{"id":"ITEM0022","name":"凉皮","price":8,"amounts":1,"subTotal":8}
+    ]);
+    expect(JSON.stringify(basicOrderDetails)).toBe(result)
 
   });
 });

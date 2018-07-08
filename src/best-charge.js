@@ -1,6 +1,12 @@
+const {loadAllItems} = require('../src/items')
+
+const {loadPromotions} = require('../src/promotions')
+
 function bestCharge(selectedItems) {
   const formatedIdAndAmounts=splitIdAndAmounts(selectedItems);
   console.info(formatedIdAndAmounts);
+  const basicOrderDetails=getBasicOrderDetails(formatedIdAndAmounts , loadAllItems());
+  console.info(basicOrderDetails);
   return /*TODO*/;
 }
 
@@ -16,7 +22,27 @@ function splitIdAndAmounts(selectedItems) {
   }
   return formatedIdAndAmounts;
 }
+/*得到基本订单详情*/
+function getBasicOrderDetails(formatedIdAndAmounts , allItems){
+  const basicOrderDetails=[];
+  for (let formatedItem of formatedIdAndAmounts){
+    let basicOrderDetailsObj={};
+    for (let allItem of allItems){
+      if (formatedItem.id === allItem.id){
+        basicOrderDetailsObj.id = formatedItem.id;
+        basicOrderDetailsObj.name = allItem.name;
+        basicOrderDetailsObj.price = allItem.price;
+        basicOrderDetailsObj.amounts = formatedItem.amounts;
+        basicOrderDetailsObj.subTotal = basicOrderDetailsObj.price * basicOrderDetailsObj.amounts;
+      }
+    }
+    basicOrderDetails.push(basicOrderDetailsObj);
+  }
+  return basicOrderDetails;
+}
+
 module.exports={
   splitIdAndAmounts,
+  getBasicOrderDetails,
   bestCharge
 }
