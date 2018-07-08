@@ -1,5 +1,6 @@
 const {splitIdAndAmounts,
   getBasicOrderDetails,
+  getPrePreferentialTotal,
   bestCharge} = require('../src/best-charge')
 
 const {loadAllItems} = require('../src/items')
@@ -88,6 +89,22 @@ describe('unit test', () => {
 			{"id":"ITEM0022","name":"凉皮","price":8,"amounts":1,"subTotal":8}
     ]);
     expect(JSON.stringify(basicOrderDetails)).toBe(result)
+
+  });
+});
+
+describe('unit test', () => {
+
+  it('unit test of getPrePreferentialTotal()', () => {
+
+    const selectedItems = ["ITEM0001 x 1", "ITEM0013 x 2", "ITEM0022 x 1"];
+
+    const formatedIdAndAmounts=splitIdAndAmounts(selectedItems);
+    const basicOrderDetails=getBasicOrderDetails(formatedIdAndAmounts , loadAllItems());
+    const prePreferentialTotal=getPrePreferentialTotal(basicOrderDetails);
+
+    let result=JSON.stringify(38);
+    expect(JSON.stringify(prePreferentialTotal)).toBe(result)
 
   });
 });

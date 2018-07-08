@@ -7,6 +7,8 @@ function bestCharge(selectedItems) {
   console.info(formatedIdAndAmounts);
   const basicOrderDetails=getBasicOrderDetails(formatedIdAndAmounts , loadAllItems());
   console.info(basicOrderDetails);
+  const prePreferentialTotal=getPrePreferentialTotal(basicOrderDetails);
+  console.info(prePreferentialTotal);
   return /*TODO*/;
 }
 
@@ -40,9 +42,18 @@ function getBasicOrderDetails(formatedIdAndAmounts , allItems){
   }
   return basicOrderDetails;
 }
+/*得到订单优惠前总价*/
+function getPrePreferentialTotal(basicOrderDetails){
+  let prePreferentialTotal=0;
+  for (let basicOrderDetail of basicOrderDetails){
+    prePreferentialTotal+=basicOrderDetail.subTotal;
+  }
+  return prePreferentialTotal;
+}
 
 module.exports={
   splitIdAndAmounts,
   getBasicOrderDetails,
+  getPrePreferentialTotal,
   bestCharge
 }
