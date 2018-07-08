@@ -1,6 +1,9 @@
 const {splitIdAndAmounts,
   getBasicOrderDetails,
   getPrePreferentialTotal,
+  preferentialModeOne,
+  preferentialModeTwo,
+  choosePreferentialMode,
   bestCharge} = require('../src/best-charge')
 
 const {loadAllItems} = require('../src/items')
@@ -105,6 +108,59 @@ describe('unit test', () => {
 
     let result=JSON.stringify(38);
     expect(JSON.stringify(prePreferentialTotal)).toBe(result)
+
+  });
+});
+
+describe('unit test', () => {
+
+  it('unit test of preferentialModeOne()', () => {
+
+    const selectedItems = ["ITEM0001 x 1", "ITEM0013 x 2", "ITEM0022 x 1"];
+
+    const formatedIdAndAmounts=splitIdAndAmounts(selectedItems);
+    const basicOrderDetails=getBasicOrderDetails(formatedIdAndAmounts , loadAllItems());
+    const prePreferentialTotal=getPrePreferentialTotal(basicOrderDetails);
+    const savedMoneyByModeOne=preferentialModeOne(prePreferentialTotal);
+
+    let result=JSON.stringify(6);
+    expect(JSON.stringify(savedMoneyByModeOne)).toBe(result)
+
+  });
+});
+
+describe('unit test', () => {
+
+  it('unit test of preferentialModeTwo()', () => {
+
+    const selectedItems = ["ITEM0001 x 1", "ITEM0013 x 2", "ITEM0022 x 1"];
+
+    const formatedIdAndAmounts=splitIdAndAmounts(selectedItems);
+    const basicOrderDetails=getBasicOrderDetails(formatedIdAndAmounts , loadAllItems());
+    const prePreferentialTotal=getPrePreferentialTotal(basicOrderDetails);
+    const savedMoneyByModeTwo=preferentialModeTwo(prePreferentialTotal,basicOrderDetails,loadPromotions());
+
+    let result=JSON.stringify(13);
+    expect(JSON.stringify(savedMoneyByModeTwo)).toBe(result)
+
+  });
+});
+
+describe('unit test', () => {
+
+  it('unit test of choosePreferentialMode()', () => {
+
+    const selectedItems = ["ITEM0001 x 1", "ITEM0013 x 2", "ITEM0022 x 1"];
+
+    const formatedIdAndAmounts=splitIdAndAmounts(selectedItems);
+    const basicOrderDetails=getBasicOrderDetails(formatedIdAndAmounts , loadAllItems());
+    const prePreferentialTotal=getPrePreferentialTotal(basicOrderDetails);
+    const savedMoneyByModeOne=preferentialModeOne(prePreferentialTotal);
+    const savedMoneyByModeTwo=preferentialModeTwo(prePreferentialTotal,basicOrderDetails,loadPromotions());
+    const savedMoneyAndMode = choosePreferentialMode(savedMoneyByModeOne,savedMoneyByModeTwo);
+
+    let result=JSON.stringify({"savedMoney":13,"mode":2});
+    expect(JSON.stringify(savedMoneyAndMode)).toBe(result)
 
   });
 });

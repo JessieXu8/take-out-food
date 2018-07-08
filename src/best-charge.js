@@ -9,6 +9,10 @@ function bestCharge(selectedItems) {
   console.info(basicOrderDetails);
   const prePreferentialTotal=getPrePreferentialTotal(basicOrderDetails);
   console.info(prePreferentialTotal);
+  const savedMoneyByModeOne=preferentialModeOne(prePreferentialTotal);
+  const savedMoneyByModeTwo=preferentialModeTwo(prePreferentialTotal,basicOrderDetails,loadPromotions());
+  const savedMoneyAndMode = choosePreferentialMode(savedMoneyByModeOne,savedMoneyByModeTwo);
+  console.info(savedMoneyAndMode);
   return /*TODO*/;
 }
 
@@ -50,10 +54,42 @@ function getPrePreferentialTotal(basicOrderDetails){
   }
   return prePreferentialTotal;
 }
+/*优惠方式一节省的钱（满30-6）*/
+function preferentialModeOne(prePreferentialTotal){
+  let savedMoneyByModeOne = 6;
+  return savedMoneyByModeOne;
+}
+/*优惠方式二节省的钱（指定菜品半价（黄焖鸡，凉皮））*/
+function preferentialModeTwo(prePreferentialTotal,basicOrderDetails,promotions){
+  let savedMoneyByModeTwo = 0;
+  for(let basicOrderDetail of basicOrderDetails){
+    for(let promotionItem of promotions[1].items){
+      if (basicOrderDetail.id === promotionItem){
+        savedMoneyByModeTwo += basicOrderDetail.subTotal/2;
+      }
+    }
+  }
+  return savedMoneyByModeTwo;
+}
+/*选择优惠方式*/
+function choosePreferentialMode(savedMoneyByModeOne,savedMoneyByModeTwo){
+  const savedMoneyAndMode={};
+  if (savedMoneyByModeOne >= savedMoneyByModeTwo){
+    savedMoneyAndMode.savedMoney = savedMoneyByModeOne;
+    savedMoneyAndMode.mode = 1;
+  }else{
+    savedMoneyAndMode.savedMoney = savedMoneyByModeTwo;
+    savedMoneyAndMode.mode = 2;
+  }
+  return savedMoneyAndMode;
+}
 
 module.exports={
   splitIdAndAmounts,
   getBasicOrderDetails,
   getPrePreferentialTotal,
+  preferentialModeOne,
+  preferentialModeTwo,
+  choosePreferentialMode,
   bestCharge
 }
