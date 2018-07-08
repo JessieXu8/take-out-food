@@ -5,6 +5,7 @@ const {splitIdAndAmounts,
   preferentialModeTwo,
   choosePreferentialMode,
   getFinalMoney,
+  getFinalOrderDetails,
   bestCharge} = require('../src/best-charge')
 
 const {loadAllItems} = require('../src/items')

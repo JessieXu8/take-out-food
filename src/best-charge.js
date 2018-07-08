@@ -15,6 +15,9 @@ function bestCharge(selectedItems) {
   console.info(savedMoneyAndMode);
   const finalMoney=getFinalMoney(prePreferentialTotal ,savedMoneyAndMode);
   console.info(finalMoney);
+  const finalOrderDetails = getFinalOrderDetails(basicOrderDetails,savedMoneyAndMode,finalMoney);
+  console.info(finalOrderDetails);
+  return finalOrderDetails;
   return /*TODO*/;
 }
 
@@ -58,7 +61,12 @@ function getPrePreferentialTotal(basicOrderDetails){
 }
 /*优惠方式一节省的钱（满30-6）*/
 function preferentialModeOne(prePreferentialTotal){
-  let savedMoneyByModeOne = 6;
+  let savedMoneyByModeOne = 0;
+  if (prePreferentialTotal >= 30){
+    savedMoneyByModeOne = 6;
+  }else {
+    savedMoneyByModeOne = 0;
+  }
   return savedMoneyByModeOne;
 }
 /*优惠方式二节省的钱（指定菜品半价（黄焖鸡，凉皮））*/
@@ -76,7 +84,11 @@ function preferentialModeTwo(prePreferentialTotal,basicOrderDetails,promotions){
 /*选择优惠方式*/
 function choosePreferentialMode(savedMoneyByModeOne,savedMoneyByModeTwo){
   const savedMoneyAndMode={};
-  if (savedMoneyByModeOne >= savedMoneyByModeTwo){
+  if (savedMoneyByModeOne === savedMoneyByModeTwo && savedMoneyByModeOne === 0){
+    savedMoneyAndMode.savedMoney = 0;
+    savedMoneyAndMode.mode = 0;
+  }
+  else if (savedMoneyByModeOne >= savedMoneyByModeTwo){
     savedMoneyAndMode.savedMoney = savedMoneyByModeOne;
     savedMoneyAndMode.mode = 1;
   }else{
@@ -90,6 +102,40 @@ function getFinalMoney(prePreferentialTotal ,savedMoneyAndMode){
   let finalMoney = prePreferentialTotal -savedMoneyAndMode.savedMoney;
   return finalMoney;
 }
+/*得到最终订单*/
+function getFinalOrderDetails(basicOrderDetails,savedMoneyAndMode,finalMoney){
+  let finalOrderDetails="";
+  let tempStr="";
+  for (let basicOrderDetail of basicOrderDetails){
+    tempStr+=`\n${basicOrderDetail.name} x ${basicOrderDetail.amounts} = ${basicOrderDetail.subTotal}元`;
+  }
+  if (savedMoneyAndMode.mode === 0){
+    finalOrderDetails=`
+============= 订餐明细 =============${tempStr}
+-----------------------------------
+总计：${finalMoney}元
+===================================`;
+  }else if (savedMoneyAndMode.mode === 1){
+    finalOrderDetails=`
+============= 订餐明细 =============${tempStr}
+-----------------------------------
+使用优惠:
+满30减6元，省${savedMoneyAndMode.savedMoney}元
+-----------------------------------
+总计：${finalMoney}元
+===================================`;
+  }else if (savedMoneyAndMode.mode === 2){
+    finalOrderDetails=`
+============= 订餐明细 =============${tempStr}
+-----------------------------------
+使用优惠:
+指定菜品半价(黄焖鸡，凉皮)，省${savedMoneyAndMode.savedMoney}元
+-----------------------------------
+总计：${finalMoney}元
+===================================`;
+  }
+  return finalOrderDetails;
+}
 
 module.exports={
   splitIdAndAmounts,
@@ -99,5 +145,6 @@ module.exports={
   preferentialModeTwo,
   choosePreferentialMode,
   getFinalMoney,
+  getFinalOrderDetails,
   bestCharge
 }
