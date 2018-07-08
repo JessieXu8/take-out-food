@@ -3,22 +3,23 @@ const {loadAllItems} = require('../src/items')
 const {loadPromotions} = require('../src/promotions')
 
 function bestCharge(selectedItems) {
+  //将点餐条码分割成[{id:'ITEM0001',amounts:1},...]的形式
   const formatedIdAndAmounts=splitIdAndAmounts(selectedItems);
-  console.info(formatedIdAndAmounts);
+  //得到基本订单详情
   const basicOrderDetails=getBasicOrderDetails(formatedIdAndAmounts , loadAllItems());
-  console.info(basicOrderDetails);
+  //得到订单优惠前总价
   const prePreferentialTotal=getPrePreferentialTotal(basicOrderDetails);
-  console.info(prePreferentialTotal);
+  //优惠方式一节省的钱（满30-6）
   const savedMoneyByModeOne=preferentialModeOne(prePreferentialTotal);
+  //优惠方式二节省的钱（指定菜品半价（黄焖鸡，凉皮））
   const savedMoneyByModeTwo=preferentialModeTwo(prePreferentialTotal,basicOrderDetails,loadPromotions());
+  //选择优惠方式
   const savedMoneyAndMode = choosePreferentialMode(savedMoneyByModeOne,savedMoneyByModeTwo);
-  console.info(savedMoneyAndMode);
+  //计算订单优惠后需要付的钱
   const finalMoney=getFinalMoney(prePreferentialTotal ,savedMoneyAndMode);
-  console.info(finalMoney);
+  //得到最终订单
   const finalOrderDetails = getFinalOrderDetails(basicOrderDetails,savedMoneyAndMode,finalMoney);
-  console.info(finalOrderDetails);
   return finalOrderDetails;
-  return /*TODO*/;
 }
 
 /*将点餐条码分割成{id: xx , amounts: xx}格式*/
